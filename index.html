@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes App</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    let globalId = 1;
+
+    function markAsDone(todoId) {
+      const parent = document.getElementById(todoId);
+      parent.classList.add("completed");
+      const button = parent.querySelector(".mark-done-btn");
+      button.innerHTML = "Done!";
+      button.classList.add("done-btn");
+      button.disabled = true;
+    }
+
+    function createChild(title, description, id) {
+      const child = document.createElement("div");
+      child.classList.add("todo-item");
+      child.setAttribute("id", id);
+
+      const firstGrandParent = document.createElement("div");
+      firstGrandParent.classList.add("todo-title");
+      firstGrandParent.innerHTML = title;
+
+      const secondGrandParent = document.createElement("div");
+      secondGrandParent.classList.add("todo-desc");
+      secondGrandParent.innerHTML = description;
+
+      const thirdGrandParent = document.createElement("button");
+      thirdGrandParent.classList.add("mark-done-btn");
+      thirdGrandParent.innerHTML = "Mark as done";
+      thirdGrandParent.onclick = function () {
+        markAsDone(id);
+      };
+
+      child.appendChild(firstGrandParent);
+      child.appendChild(secondGrandParent);
+      child.appendChild(thirdGrandParent);
+
+      return child;
+    }
+
+    function addTodo() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+
+      if (title.trim() === "" || description.trim() === "") {
+        alert("Please enter both a title and a description.");
+        return;
+      }
+
+      const parent = document.getElementById("todos");
+      parent.prepend(createChild(title, description, globalId++)); // Newest note on top
+
+      document.getElementById("title").value = "";
+      document.getElementById("description").value = "";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container1">
+    <h1>📌 Notes App</h1>
+    <h2>Jot down any todos or reminders!</h2>
+    <input type="text" id="title" placeholder="Enter a title...">
+    <input type="text" id="description" placeholder="Add details...">
+    <button onclick="addTodo()">Add Note</button>
+  </div>
+
+  <div class="container2">
+    <div id="todos"></div>
+  </div>
+</body>
+
+</html>
+
